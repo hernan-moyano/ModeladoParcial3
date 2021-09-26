@@ -1,0 +1,89 @@
+﻿@page "/paises"
+<h2>Paises</h2>
+<br />
+<a class="btn btn-primary" href="paises/crear">Nuevo</a>
+<br />
+<table>
+    <tr>
+        <th>Código</th>
+        <th>Nombre</th>
+    </tr>
+    @if (paises == null)
+    {
+        <tr>Cargando.....</tr>
+    }
+    else if (paises.Count == 0)
+    {
+        <tr>No existen paises</tr>
+    }
+    else
+    {
+        @foreach (var item in paises)
+        {
+            <tr>
+                <td>@item.CodPais</td>
+                <td>@item.NombrePais</td>
+                <td>
+                    <a class="btn btn-success"
+                       href="paises/editar/@item.Id/@item.CodPais/@item.NombrePais">
+                        Editar
+                    </a>
+                </td>
+                <td><button class="btn btn-warning" @onclick="()=>Eliminar(item)">Eliminar</button></td>
+            </tr>
+        }
+    }
+</table>
+
+<Confirmacion @ref="confirmacion"
+              onConfirm="GrabarEliminar"
+              onCancel="Cancelar"
+              Titulo="BORRAR"
+              textCancelar="Salir"
+              textOk="Aceptar">
+    <div>¿Desea eliminar el país @eliminarPais.NombrePais?</div>
+</Confirmacion>
+
+
+@code {
+    List<SegundaEvaluacion.Shared.Datos.Entidades.Pais> paises;
+    Confirmacion confirmacion;
+    string codPais = "";
+    string nomPais = "";
+    SegundaEvaluacion.Shared.Datos.Entidades.Pais eliminarPais;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        paises = new()
+        {
+                new SegundaEvaluacion.Shared.Datos.Entidades.Pais()
+                { CodPais = "at", NombrePais = "Atlantis" },
+                new SegundaEvaluacion.Shared.Datos.Entidades.Pais()
+                { CodPais = "es", NombrePais = "Esparta" }
+            };
+    }
+
+    private void Eliminar(SegundaEvaluacion.Shared.Datos.Entidades.Pais paisEliminar)
+    {
+        confirmacion.Mostrar();
+        codPais = paisEliminar.CodPais;
+        nomPais = paisEliminar.NombrePais;
+        eliminarPais = paisEliminar;
+    }
+
+
+    private void GrabarEliminar()
+    {
+        paises.Remove(eliminarPais);
+        Cancelar();
+    }
+
+    private void Cancelar()
+    {
+        confirmacion.Ocultar();
+        eliminarPais = null;
+    }
+
+}
