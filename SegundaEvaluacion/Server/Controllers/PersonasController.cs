@@ -24,7 +24,8 @@ namespace SegundaEvaluacion.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Persona>>> Get()
         {
-            return await context.Personas.Include(x => x.Nacionalidad).ToListAsync();
+            //return await context.Personas.Include(x => x.Nacionalidad).ToListAsync();
+            return await context.Personas.ToListAsync();
 
         }
 

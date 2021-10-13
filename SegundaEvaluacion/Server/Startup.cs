@@ -31,8 +31,9 @@ namespace SegundaEvaluacion.Server
             // para complemento swagger
             services.AddSwaggerGen(c =>
             { c.SwaggerDoc("1v", new OpenApiInfo { Title = "TerceraEvaluacion", Version = "1v" }); });
-            services.AddControllersWithViews().AddJsonOptions(x =>
-            x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+
+            //services.AddControllersWithViews().AddJsonOptions(x =>
+            //x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
             //deafault por sistema
             services.AddControllersWithViews();
