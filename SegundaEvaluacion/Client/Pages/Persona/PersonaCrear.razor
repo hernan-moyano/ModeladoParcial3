@@ -1,5 +1,27 @@
-﻿<h3>PersonaCrear</h3>
+﻿@page "/personas/crear"
+@inject NavigationManager navigationManager
+@inject IHttpService http
+
+<h2>Nueva</h2>
+
+<PersonaFormulario onValidSubmit="GrabarNuevo" persona="pers" onCancel="Cancelar" />
 
 @code {
+    private Persona pers = new();
+
+    private async Task GrabarNuevo()
+    {
+        var httpRespuesta = await http.Post<Persona>("api/personas", pers);
+        if (httpRespuesta.Error)
+        {
+            var body = await httpRespuesta.GetBody();
+        }
+        navigationManager.NavigateTo("/personas");
+    }
+
+    private void Cancelar()
+    {
+        navigationManager.NavigateTo("/personas");
+    }
 
 }
