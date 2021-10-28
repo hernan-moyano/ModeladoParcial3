@@ -1,14 +1,16 @@
 ﻿@page "/paises"
 @inject IHttpService http
-<h2>Paises</h2>
-<br />
-<a class="btn btn-primary" href="paises/crear">Nuevo</a>
-<br />
-<table>
-    <tr>
-        <th>Código</th>
-        <th>Nombre</th>
-    </tr>
+<h2 >Paises</h2>
+<div>
+    <a class="btn btn-outline-success" href="paises/crear">Nuevo</a>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Nombre</th>
+        </tr>
+    </thead>
     @if (paises == null)
     {
         <tr>Cargando.....</tr>
@@ -19,21 +21,26 @@
     }
     else
     {
-        @foreach (var item in paises)
-        {
-            <tr>
-                <td>@item.CodPais</td>
-                <td>@item.NombrePais</td>
-                <td>
-                    <a class="btn btn-success"
-                       href="paises/editar/@item.Id">
-                        Editar
-                    </a>
-                </td>
-                <td><button class="btn btn-warning" @onclick="()=>Eliminar(item)">Eliminar</button></td>
-            </tr>
-        }
+        <tbody>
+            @foreach (var item in paises)
+            {
+
+                <tr>
+                    <td>@item.CodPais</td>
+                    <td>@item.NombrePais</td>
+                    <td>
+                        <a class="btn btn-outline-warning"
+                           href="paises/editar/@item.Id">
+                            Editar
+                        </a>
+
+                        <button class="btn btn-outline-danger" @onclick="()=>Eliminar(item)">Eliminar</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
     }
+
 </table>
 
 <Confirmacion @ref="confirmacion"

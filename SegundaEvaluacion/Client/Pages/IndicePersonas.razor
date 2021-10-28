@@ -1,17 +1,7 @@
 ﻿@page "/personas"
 @inject IHttpService http
-<h2>Personas</h2>
-<br />
-<a class="btn btn-primary" href="Personas/crear">Nuevo</a>
-<br />
-<table>
-    <tr>
-        <th>DNI</th>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Nacimiento</th>
-        <th>Nacionalidad</th>
-    </tr>
+<h2 class="blockquote text-center">Personas</h2>
+<table class="table">
     @if (personas == null)
     {
         <tr>Cargando.....</tr>
@@ -22,45 +12,63 @@
     }
     else
     {
-        @foreach (var item in personas)
-        {
+
+        <thead>
             <tr>
-                <td>@item.dni</td>
-                <td>@item.nombre</td>
-                <td>@item.apellido</td>
-                <td>@item.fecha_nacimiento</td>
-                <td>@item.Nacionalidad</td>
+                <th>DNI</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Nacimiento</th>
 
 
-                <td>
-                    <a class="btn btn-success"
-                       href="Personas/editar/@item.Id">
-                        Editar
-                    </a>
-                </td>
-                <td><button class="btn btn-warning" @onclick="()=>Eliminar(item)">Eliminar</button></td>
             </tr>
-        }
+        </thead>
+        <tbody>
+
+            @foreach (var item in personas)
+            {
+                <tr>
+                    <td>@item.dni</td>
+                    <td>@item.nombre</td>
+                    <td>@item.apellido</td>
+                    <td>@item.fecha_nacimiento.ToShortDateString()</td>
+
+
+
+                    <td>
+                        <a class="btn btn-warning"
+                           href="Personas/editar/@item.Id">
+                            Editar
+                        </a>
+                        <button class="btn btn-danger" @onclick="() => Eliminar(item)">Eliminar</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
     }
 </table>
+<div>
+    <a class="btn btn-outline-success" href="personas/crear">Nuevo</a>
+</div>
+    
+    <Confirmacion @ref="confirmacion"
+                  onConfirm="GrabarEliminar"
+                  onCancel="Cancelar"
+                  Titulo="BORRAR"
+                  textCancelar="Salir"
+                  textOk="Aceptar">
+        <div>¿Desea eliminar a  @eliminarpersona.nombre @eliminarpersona.apellido ?</div>
+    </Confirmacion>
 
-<Confirmacion @ref="confirmacion"
-              onConfirm="GrabarEliminar"
-              onCancel="Cancelar"
-              Titulo="BORRAR"
-              textCancelar="Salir"
-              textOk="Aceptar">
-    <div>¿Desea eliminar a  @eliminarpersona.nombre @eliminarpersona.apellido ?</div>
-</Confirmacion>
 
+    @code {
+        //TODO: no se puede guardar por depender de nacionalidad
+        List<SegundaEvaluacion.Shared.Datos.Entidades.Persona> personas;
+        Confirmacion confirmacion;
 
-@code {
-    List<SegundaEvaluacion.Shared.Datos.Entidades.Persona> personas;
-    Confirmacion confirmacion;
+        SegundaEvaluacion.Shared.Datos.Entidades.Persona eliminarpersona;
 
-    SegundaEvaluacion.Shared.Datos.Entidades.Persona eliminarpersona;
-
-    protected override async Task OnInitializedAsync()
+protected override async Task OnInitializedAsync()
     {
         base.OnInitialized();
         await Leer();
@@ -99,4 +107,4 @@
         eliminarpersona = null;
     }
 
-}
+    }

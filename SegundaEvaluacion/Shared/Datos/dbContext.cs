@@ -31,7 +31,7 @@ namespace SegundaEvaluacion.Shared.Datos.Entidades
 
             }
 
-            base.OnModelCreating(modelBuilder);
+
 
         }
 

@@ -32,21 +32,18 @@
             <ValidationMessage For="@(() => persona.fecha_nacimiento)" />
         </div>
     </div>
-    @*
-        <div class="form-group">
-            <label>Nacionalidad</label>
-            <div>
-                <InputNumber class="form-control" @bind-Value="@persona.Nacionalidad" />
-                <ValidationMessage For="@(() => persona.Nacionalidad)" />
-            </div>
-        </div>
-    *@
+
+
+
     <button class="btn btn-primary" type="submit">Guardar</button>
     <button class="btn btn-secondary" @onclick="onCancel" type="button">Cancelar</button>
 </EditForm>
 
 @code {
-    [Parameter] public Persona persona { get; set; }  
+    [Parameter] public Persona persona { get; set; }
     [Parameter] public EventCallback onValidSubmit { get; set; }
     [Parameter] public EventCallback onCancel { get; set; }
+
+
+
 }

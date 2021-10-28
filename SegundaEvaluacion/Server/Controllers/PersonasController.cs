@@ -78,6 +78,7 @@ namespace SegundaEvaluacion.Server.Controllers
             na.apellido = Personas.apellido;
             na.fecha_nacimiento = Personas.fecha_nacimiento;
 
+
             if (na == null)
             {
                 return NotFound($"no existe la Persona a modificar.");

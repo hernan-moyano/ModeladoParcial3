@@ -83,5 +83,6 @@ namespace SegundaEvaluacion.Client.Servicios
             return JsonSerializer.Deserialize<T>(RepuestaString,
                 new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
+
     }
 }
