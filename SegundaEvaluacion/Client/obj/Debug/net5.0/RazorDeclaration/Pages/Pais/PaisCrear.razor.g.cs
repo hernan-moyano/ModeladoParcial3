@@ -103,6 +103,13 @@ using SegundaEvaluacion.Shared.Datos.Entidades;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 14 "F:\PROYECTOS\CARRERA\ModeladoParcial3\SegundaEvaluacion\Client\_Imports.razor"
+using SegundaEvaluacion.Client.Servicios;
+
+#line default
+#line hidden
+#nullable disable
     [Microsoft.AspNetCore.Components.RouteAttribute("/paises/crear")]
     public partial class PaisCrear : Microsoft.AspNetCore.Components.ComponentBase
     {
@@ -112,17 +119,21 @@ using SegundaEvaluacion.Shared.Datos.Entidades;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 7 "F:\PROYECTOS\CARRERA\ModeladoParcial3\SegundaEvaluacion\Client\Pages\Pais\PaisCrear.razor"
+#line 9 "F:\PROYECTOS\CARRERA\ModeladoParcial3\SegundaEvaluacion\Client\Pages\Pais\PaisCrear.razor"
        
     private Pais pais = new();
 
     private async Task GrabarNuevo()
     {
-        Console.WriteLine($"Graba {pais.NombrePais}");
+        var httpRespuesta = await http.Post<Pais>("api/paises", pais);
+        if (httpRespuesta.Error)
+        {
+            var body = await httpRespuesta.GetBody();
+        }
         navigationManager.NavigateTo("/paises");
     }
 
-    private async Task Cancelar()
+    private void Cancelar()
     {
         navigationManager.NavigateTo("/paises");
     }
@@ -131,6 +142,7 @@ using SegundaEvaluacion.Shared.Datos.Entidades;
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IHttpService http { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager navigationManager { get; set; }
     }
 }

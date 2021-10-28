@@ -23,6 +23,7 @@ namespace SegundaEvaluacion.Server.Controllers
         public async Task<ActionResult<List<Pais>>> Get()
         {
             return await context.Paises.ToListAsync();
+
         }
 
         [HttpGet("{id:int}")]

@@ -1,89 +1,104 @@
 ﻿@page "/personas"
-<h2>Personas</h2>
-<br />
-<a class="btn btn-primary" href="Personas/crear">Nuevo</a>
-<br />
-<table>
-    <tr>
-        <th>DNI</th>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Nacimiento</th>
-        <th>Nacionalidad</th>
-    </tr>
-    @if (Personas == null)
+@inject IHttpService http
+<h2 class="blockquote text-center">Personas</h2>
+<table class="table">
+    @if (personas == null)
     {
         <tr>Cargando.....</tr>
     }
-    else if (Personas.Count == 0)
+    else if (personas.Count == 0)
     {
         <tr>No existen Personas</tr>
     }
     else
     {
-        @foreach (var item in Personas)
-        {
-<tr>
-    <td>@item.dni</td>
-    <td>@item.nombre</td>
-    <td>@item.apellido</td>
-    <td>@item.fecha_nacimiento</td>
-    <td>@item.Nacionalidad</td>
+
+        <thead>
+            <tr>
+                <th>DNI</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Nacimiento</th>
 
 
-    <td>
-        <a class="btn btn-success"
-           href="Personas/editar/@item.dni/@item.nombre/@item.apellido/@item.fecha_nacimiento/@item.Nacionalidad">
-            Editar
-        </a>
-    </td>
-    <td><button class="btn btn-warning" @onclick="()=>Eliminar(item)">Eliminar</button></td>
-</tr>
-        }
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in personas)
+            {
+                <tr>
+                    <td>@item.dni</td>
+                    <td>@item.nombre</td>
+                    <td>@item.apellido</td>
+                    <td>@item.fecha_nacimiento.ToShortDateString()</td>
+
+
+
+                    <td>
+                        <a class="btn btn-warning"
+                           href="Personas/editar/@item.Id">
+                            Editar
+                        </a>
+                        <button class="btn btn-danger" @onclick="() => Eliminar(item)">Eliminar</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
     }
 </table>
+<div>
+    <a class="btn btn-outline-success" href="personas/crear">Nuevo</a>
+</div>
+    
+    <Confirmacion @ref="confirmacion"
+                  onConfirm="GrabarEliminar"
+                  onCancel="Cancelar"
+                  Titulo="BORRAR"
+                  textCancelar="Salir"
+                  textOk="Aceptar">
+        <div>¿Desea eliminar a  @eliminarpersona.nombre @eliminarpersona.apellido ?</div>
+    </Confirmacion>
 
-<Confirmacion @ref="confirmacion"
-              onConfirm="GrabarEliminar"
-              onCancel="Cancelar"
-              Titulo="BORRAR"
-              textCancelar="Salir"
-              textOk="Aceptar">
-    <div>¿Desea eliminar a  @eliminarpersona.nombre @eliminarpersona.apellido ?</div>
-</Confirmacion>
 
+    @code {
+        //TODO: no se puede guardar por depender de nacionalidad
+        List<SegundaEvaluacion.Shared.Datos.Entidades.Persona> personas;
+        Confirmacion confirmacion;
 
-@code {
-    List<SegundaEvaluacion.Shared.Datos.Entidades.Persona> Personas;
-    Confirmacion confirmacion;
-    string nompersona = "";
-    string apepersona = "";
-    SegundaEvaluacion.Shared.Datos.Entidades.Persona eliminarpersona;
+        SegundaEvaluacion.Shared.Datos.Entidades.Persona eliminarpersona;
 
-    protected override void OnInitialized()
+protected override async Task OnInitializedAsync()
     {
         base.OnInitialized();
-
-        Personas = new()
-        {
-            new SegundaEvaluacion.Shared.Datos.Entidades.Persona()
-            {dni= 35987654, nombre = "Carla", apellido = "Alvarez", fecha_nacimiento = DateTime.Parse("01/01/1990")   }
-        };
+        await Leer();
     }
+    private async Task Leer()
+    {
+        var respuestaHttp = await http.Get<List<SegundaEvaluacion.Shared.Datos.Entidades.Persona>>("api/personas");
+        if (!respuestaHttp.Error)
+        {
+            personas = respuestaHttp.Respuesta;
+        }
+    }
+
+
 
     private void Eliminar(SegundaEvaluacion.Shared.Datos.Entidades.Persona personaEliminar)
     {
         confirmacion.Mostrar();
-        nompersona = personaEliminar.nombre;
-        apepersona = personaEliminar.apellido;
         eliminarpersona = personaEliminar;
     }
 
-
-    private void GrabarEliminar()
+    private async Task GrabarEliminar()
     {
-        Personas.Remove(eliminarpersona);
+        var respuesta = await http.Delete($"api/personas/{eliminarpersona.Id}");
+        if (respuesta.Error)
+        {
+            var body = await respuesta.GetBody();
+        }
         Cancelar();
+        await Leer();
     }
 
     private void Cancelar()
@@ -92,4 +107,4 @@
         eliminarpersona = null;
     }
 
-}
+    }

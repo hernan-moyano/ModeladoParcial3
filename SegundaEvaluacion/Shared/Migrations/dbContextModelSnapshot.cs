@@ -51,9 +51,6 @@ namespace SegundaEvaluacion.Shared.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("NacionalidadId")
-                        .HasColumnType("int");
-
                     b.Property<string>("apellido")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -73,21 +70,10 @@ namespace SegundaEvaluacion.Shared.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NacionalidadId");
-
                     b.HasIndex(new[] { "dni" }, "UQ_Persona_dni")
                         .IsUnique();
 
                     b.ToTable("Personas");
-                });
-
-            modelBuilder.Entity("SegundaEvaluacion.Shared.Datos.Entidades.Persona", b =>
-                {
-                    b.HasOne("SegundaEvaluacion.Shared.Datos.Entidades.Pais", "Nacionalidad")
-                        .WithMany()
-                        .HasForeignKey("NacionalidadId");
-
-                    b.Navigation("Nacionalidad");
                 });
 #pragma warning restore 612, 618
         }

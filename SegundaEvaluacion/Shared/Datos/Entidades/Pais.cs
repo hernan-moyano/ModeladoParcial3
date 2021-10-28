@@ -20,8 +20,8 @@ namespace SegundaEvaluacion.Shared.Datos.Entidades
 
         [Required(ErrorMessage = "El nombre es obligatorio.")]
         [MaxLength(120, ErrorMessage = "El maximo de caracteres es {1}.")]
-        public string NombrePais { get; set; } 
-       
+        public string NombrePais { get; set; }
+
     }
 
 }

@@ -1,5 +1,45 @@
-﻿<h3>PersonaEditar</h3>
+﻿@page "/personas/editar/{PersonasId:int}"
+@inject NavigationManager navigationManager
+@inject IHttpService http
+
+<h2>Modificar</h2>
+<PersonaFormulario onValidSubmit="GrabarModificacion" persona="pers" onCancel="Cancelar" />
 
 @code {
+    private Persona pers;
+    [Parameter] public int PersonasId { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await MostrarPersona();
+    }
+
+    private async Task MostrarPersona()
+    {
+        var httpRespuesta = await http.Get<Persona>($"api/personas/{PersonasId}");
+        if (httpRespuesta.Error)
+        {
+            var body = await httpRespuesta.GetBody();
+        }
+        else
+        {
+            pers = httpRespuesta.Respuesta;
+        }
+    }
+
+    private async Task GrabarModificacion()
+    {
+        var httpRespuesta = await http.Put<Persona>($"api/personas/{PersonasId}", pers);
+        if (httpRespuesta.Error)
+        {
+            var body = await httpRespuesta.GetBody();
+        }
+        navigationManager.NavigateTo("/personas");
+    }
+
+    private void Cancelar()
+    {
+        navigationManager.NavigateTo("/personas");
+    }
 
 }

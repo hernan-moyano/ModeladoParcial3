@@ -1,7 +1,49 @@
-﻿
+﻿<EditForm Model="persona" OnValidSubmit="onValidSubmit">
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <label>DNI</label>
+        <div>
+            <InputNumber class="form-control" @bind-Value="@persona.dni" />
+            <ValidationMessage For="@(() => persona.dni)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Nombre</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@persona.nombre" />
+            <ValidationMessage For="@(() => persona.nombre)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Apellido</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@persona.apellido" />
+            <ValidationMessage For="@(() => persona.apellido)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Fecha de nacimiento</label>
+        <div>
+            <InputDate class="form-control" @bind-Value="@persona.fecha_nacimiento" />
+            <ValidationMessage For="@(() => persona.fecha_nacimiento)" />
+        </div>
+    </div>
+
+
+
+    <button class="btn btn-primary" type="submit">Guardar</button>
+    <button class="btn btn-secondary" @onclick="onCancel" type="button">Cancelar</button>
+</EditForm>
 
 @code {
     [Parameter] public Persona persona { get; set; }
     [Parameter] public EventCallback onValidSubmit { get; set; }
     [Parameter] public EventCallback onCancel { get; set; }
+
+
+
 }

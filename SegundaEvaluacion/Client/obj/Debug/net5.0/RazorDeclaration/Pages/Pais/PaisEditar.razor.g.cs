@@ -103,7 +103,14 @@ using SegundaEvaluacion.Shared.Datos.Entidades;
 #line default
 #line hidden
 #nullable disable
-    [Microsoft.AspNetCore.Components.RouteAttribute("/paises/editar/{PaisId:int}/{codPais}/{nomPais}")]
+#nullable restore
+#line 14 "F:\PROYECTOS\CARRERA\ModeladoParcial3\SegundaEvaluacion\Client\_Imports.razor"
+using SegundaEvaluacion.Client.Servicios;
+
+#line default
+#line hidden
+#nullable disable
+    [Microsoft.AspNetCore.Components.RouteAttribute("/paises/editar/{PaisId:int}")]
     public partial class PaisEditar : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998
@@ -116,26 +123,36 @@ using SegundaEvaluacion.Shared.Datos.Entidades;
        
     private Pais pais;
     [Parameter] public int PaisId { get; set; }
-    [Parameter] public string codPais { get; set; }
-    [Parameter] public string nomPais { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
-        pais = new()
+        await MostrarPais();
+    }
+
+    private async Task MostrarPais()
+    {
+        var httpRespuesta = await http.Get<Pais>($"api/paises/{PaisId}");
+        if (httpRespuesta.Error)
         {
-            Id = PaisId,
-            CodPais = codPais,
-            NombrePais = nomPais
-        };
+            var body = await httpRespuesta.GetBody();
+        }
+        else
+        {
+            pais = httpRespuesta.Respuesta;
+        }
     }
 
     private async Task GrabarModificacion()
     {
-        Console.WriteLine($"Graba modificacion {pais.NombrePais}");
+        var httpRespuesta = await http.Put<Pais>($"api/paises/{PaisId}", pais);
+        if (httpRespuesta.Error)
+        {
+            var body = await httpRespuesta.GetBody();
+        }
         navigationManager.NavigateTo("/paises");
     }
 
-    private async Task Cancelar()
+    private void Cancelar()
     {
         navigationManager.NavigateTo("/paises");
     }
@@ -144,6 +161,7 @@ using SegundaEvaluacion.Shared.Datos.Entidades;
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IHttpService http { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager navigationManager { get; set; }
     }
 }

@@ -103,6 +103,13 @@ using SegundaEvaluacion.Shared.Datos.Entidades;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 14 "F:\PROYECTOS\CARRERA\ModeladoParcial3\SegundaEvaluacion\Client\_Imports.razor"
+using SegundaEvaluacion.Client.Servicios;
+
+#line default
+#line hidden
+#nullable disable
     [Microsoft.AspNetCore.Components.RouteAttribute("/paises")]
     public partial class IndicePaises : Microsoft.AspNetCore.Components.ComponentBase
     {
@@ -112,41 +119,64 @@ using SegundaEvaluacion.Shared.Datos.Entidades;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 48 "F:\PROYECTOS\CARRERA\ModeladoParcial3\SegundaEvaluacion\Client\Pages\IndicePaises.razor"
+#line 56 "F:\PROYECTOS\CARRERA\ModeladoParcial3\SegundaEvaluacion\Client\Pages\IndicePaises.razor"
        
     List<SegundaEvaluacion.Shared.Datos.Entidades.Pais> paises;
     Confirmacion confirmacion;
-    string codPais = "";
-    string nomPais = "";
+
     SegundaEvaluacion.Shared.Datos.Entidades.Pais eliminarPais;
 
-    protected override void OnInitialized()
+    //protected override void OnInitialized()
+    //{
+    //    base.OnInitialized();
+
+    //    paises = new()
+    //    {
+    //            new SegundaEvaluacion.Shared.Datos.Entidades.Pais()
+    //                new SegundaEvaluacion.Shared.Datos.Entidades.Pais()
+    //        };
+    //}
+
+    protected override async Task OnInitializedAsync()
     {
         base.OnInitialized();
-
-        paises = new()
-        {
-                new SegundaEvaluacion.Shared.Datos.Entidades.Pais()
-                { CodPais = "at", NombrePais = "Atlantis" },
-                new SegundaEvaluacion.Shared.Datos.Entidades.Pais()
-                { CodPais = "es", NombrePais = "Esparta" }
-            };
+        await Leer();
     }
-
+    private async Task Leer()
+    {
+        var respuestaHttp = await http.Get<List<SegundaEvaluacion.Shared.Datos.Entidades.Pais>>("api/paises");
+        if (!respuestaHttp.Error)
+        {
+            paises = respuestaHttp.Respuesta;
+        }
+    }
+    //private void Eliminar(SegundaEvaluacion.Shared.Datos.Entidades.Pais paisEliminar)
+    //{
+    //    confirmacion.Mostrar();
+    //    eliminarPais = paisEliminar;
+    //}
+    //private void GrabarEliminar()
+    //{
+    //    paises.Remove(eliminarPais);
+    //    Cancelar();
+    //}
     private void Eliminar(SegundaEvaluacion.Shared.Datos.Entidades.Pais paisEliminar)
     {
         confirmacion.Mostrar();
-        codPais = paisEliminar.CodPais;
-        nomPais = paisEliminar.NombrePais;
         eliminarPais = paisEliminar;
     }
 
-
-    private void GrabarEliminar()
+    private async Task GrabarEliminar()
     {
-        paises.Remove(eliminarPais);
+        var respuesta = await http.Delete($"api/paises/{eliminarPais.Id}");
+        if (respuesta.Error)
+        {
+            var body = await respuesta.GetBody();
+        }
         Cancelar();
+        await Leer();
     }
+
 
     private void Cancelar()
     {
@@ -158,6 +188,7 @@ using SegundaEvaluacion.Shared.Datos.Entidades;
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IHttpService http { get; set; }
     }
 }
 #pragma warning restore 1591

@@ -103,6 +103,13 @@ using SegundaEvaluacion.Shared.Datos.Entidades;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 14 "F:\PROYECTOS\CARRERA\ModeladoParcial3\SegundaEvaluacion\Client\_Imports.razor"
+using SegundaEvaluacion.Client.Servicios;
+
+#line default
+#line hidden
+#nullable disable
     public partial class MainLayout : LayoutComponentBase
     {
         #pragma warning disable 1998

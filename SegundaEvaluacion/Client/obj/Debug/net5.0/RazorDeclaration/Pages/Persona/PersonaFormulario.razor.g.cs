@@ -103,6 +103,13 @@ using SegundaEvaluacion.Shared.Datos.Entidades;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 14 "F:\PROYECTOS\CARRERA\ModeladoParcial3\SegundaEvaluacion\Client\_Imports.razor"
+using SegundaEvaluacion.Client.Servicios;
+
+#line default
+#line hidden
+#nullable disable
     public partial class PersonaFormulario : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998
@@ -111,11 +118,14 @@ using SegundaEvaluacion.Shared.Datos.Entidades;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 3 "F:\PROYECTOS\CARRERA\ModeladoParcial3\SegundaEvaluacion\Client\Pages\Persona\PersonaFormulario.razor"
+#line 42 "F:\PROYECTOS\CARRERA\ModeladoParcial3\SegundaEvaluacion\Client\Pages\Persona\PersonaFormulario.razor"
        
     [Parameter] public Persona persona { get; set; }
     [Parameter] public EventCallback onValidSubmit { get; set; }
     [Parameter] public EventCallback onCancel { get; set; }
+
+
+
 
 #line default
 #line hidden

@@ -24,7 +24,8 @@ namespace SegundaEvaluacion.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Persona>>> Get()
         {
-            return await context.Personas.Include(x => x.Nacionalidad).ToListAsync();
+            //return await context.Personas.Include(x => x.Nacionalidad).ToListAsync();
+            return await context.Personas.ToListAsync();
 
         }
 
@@ -76,6 +77,7 @@ namespace SegundaEvaluacion.Server.Controllers
             na.nombre = Personas.nombre;
             na.apellido = Personas.apellido;
             na.fecha_nacimiento = Personas.fecha_nacimiento;
+
 
             if (na == null)
             {

@@ -103,6 +103,13 @@ using SegundaEvaluacion.Shared.Datos.Entidades;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 14 "F:\PROYECTOS\CARRERA\ModeladoParcial3\SegundaEvaluacion\Client\_Imports.razor"
+using SegundaEvaluacion.Client.Servicios;
+
+#line default
+#line hidden
+#nullable disable
     [Microsoft.AspNetCore.Components.RouteAttribute("/personas")]
     public partial class IndicePersonas : Microsoft.AspNetCore.Components.ComponentBase
     {
@@ -112,38 +119,45 @@ using SegundaEvaluacion.Shared.Datos.Entidades;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 56 "F:\PROYECTOS\CARRERA\ModeladoParcial3\SegundaEvaluacion\Client\Pages\IndicePersonas.razor"
-       
-    List<SegundaEvaluacion.Shared.Datos.Entidades.Persona> Personas;
-    Confirmacion confirmacion;
-    string nompersona = "";
-    string apepersona = "";
-    SegundaEvaluacion.Shared.Datos.Entidades.Persona eliminarpersona;
+#line 64 "F:\PROYECTOS\CARRERA\ModeladoParcial3\SegundaEvaluacion\Client\Pages\IndicePersonas.razor"
+           
+        //TODO: no se puede guardar por depender de nacionalidad
+        List<SegundaEvaluacion.Shared.Datos.Entidades.Persona> personas;
+        Confirmacion confirmacion;
 
-    protected override void OnInitialized()
+        SegundaEvaluacion.Shared.Datos.Entidades.Persona eliminarpersona;
+
+protected override async Task OnInitializedAsync()
     {
         base.OnInitialized();
-
-        Personas = new()
-        {
-            new SegundaEvaluacion.Shared.Datos.Entidades.Persona()
-            {dni= 35987654, nombre = "Carla", apellido = "Alvarez", fecha_nacimiento = DateTime.Parse("01/01/1990")   }
-        };
+        await Leer();
     }
+    private async Task Leer()
+    {
+        var respuestaHttp = await http.Get<List<SegundaEvaluacion.Shared.Datos.Entidades.Persona>>("api/personas");
+        if (!respuestaHttp.Error)
+        {
+            personas = respuestaHttp.Respuesta;
+        }
+    }
+
+
 
     private void Eliminar(SegundaEvaluacion.Shared.Datos.Entidades.Persona personaEliminar)
     {
         confirmacion.Mostrar();
-        nompersona = personaEliminar.nombre;
-        apepersona = personaEliminar.apellido;
         eliminarpersona = personaEliminar;
     }
 
-
-    private void GrabarEliminar()
+    private async Task GrabarEliminar()
     {
-        Personas.Remove(eliminarpersona);
+        var respuesta = await http.Delete($"api/personas/{eliminarpersona.Id}");
+        if (respuesta.Error)
+        {
+            var body = await respuesta.GetBody();
+        }
         Cancelar();
+        await Leer();
     }
 
     private void Cancelar()
@@ -152,10 +166,12 @@ using SegundaEvaluacion.Shared.Datos.Entidades;
         eliminarpersona = null;
     }
 
+    
 
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IHttpService http { get; set; }
     }
 }
 #pragma warning restore 1591
